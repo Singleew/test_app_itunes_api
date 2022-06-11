@@ -9,7 +9,6 @@ import UIKit
 
 class AuthorizationViewController: UIViewController, UITextFieldDelegate {
 
-    
     //MARK: - Create UI Objects
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -19,15 +18,17 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     private let backgroundView: UIView = {
         let backgroundView = UIView()
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.backgroundColor = .white
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
         return backgroundView
     }()
     
     private let authLabel: UILabel = {
         let authLabel = UILabel()
-        authLabel.translatesAutoresizingMaskIntoConstraints = false
         authLabel.text = "Authorization"
+        authLabel.textAlignment = .center
+        authLabel.font = authLabel.font.withSize(30)
+        authLabel.translatesAutoresizingMaskIntoConstraints = false
         return authLabel
     }()
     
@@ -42,15 +43,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         let passwordTextField = UITextField()
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Enter your password"
+        passwordTextField.isSecureTextEntry = true
         return passwordTextField
-    }()
-
-    
-    private let regLabel: UILabel = {
-        let loginLabel = UILabel()
-        loginLabel.translatesAutoresizingMaskIntoConstraints = false
-        loginLabel.text = "Don't have an account?"
-        return loginLabel
     }()
     
     private let logInButton: UIButton = {
@@ -59,18 +53,19 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         logInButtoon.setTitle("Log In", for: .normal)
         logInButtoon.tintColor = .white
         logInButtoon.layer.cornerRadius = 5
-        logInButtoon.translatesAutoresizingMaskIntoConstraints = false
         logInButtoon.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
+        logInButtoon.translatesAutoresizingMaskIntoConstraints = false
         return logInButtoon
     }()
     
     private let regButton: UIButton = {
         let regButton = UIButton(type: .system)
         regButton.backgroundColor = .white
-        regButton.setTitle("Registration", for: .normal)
+        regButton.setTitle("Don't have an account? Click here!", for: .normal)
         regButton.tintColor = .blue
-        regButton.translatesAutoresizingMaskIntoConstraints = false
+        regButton.layer.cornerRadius = 5
         regButton.addTarget(self, action: #selector(regButtonTapped), for: .touchUpInside)
+        regButton.translatesAutoresizingMaskIntoConstraints = false
         return regButton
     }()
     
@@ -79,28 +74,32 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     private var buttonsStack = UIStackView()
     
     
+    //MARK: - View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupView()
+        setupTextFieldDelegate()
+        setConstraints()
     }
     
+    //MARK: - Setup Views and StackView
     private func setupView() {
-        title = "Autorization"
         view.backgroundColor = .white
-        
-        textFieldsStack = UIStackView(arrangedSubviews: [mailTextField, passwordTextField])
+        textFieldsStack = UIStackView(arrangedSubviews: [authLabel, mailTextField, passwordTextField])
         textFieldsStack.axis = .vertical
         textFieldsStack.spacing = 10
         textFieldsStack.distribution = .fillProportionally
+        textFieldsStack.translatesAutoresizingMaskIntoConstraints = false
         
-        buttonsStack = UIStackView(arrangedSubviews: [logInButton, regLabel, regButton])
-        textFieldsStack.axis = .vertical
-        textFieldsStack.spacing = 10
-        textFieldsStack.distribution = .fillProportionally
+        buttonsStack = UIStackView(arrangedSubviews: [logInButton, regButton])
+        buttonsStack.axis = .vertical
+        buttonsStack.spacing = 10
+        buttonsStack.distribution = .fillProportionally
+        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(backgroundView)
-        backgroundView.addSubview(authLabel)
+       // backgroundView.addSubview(authLabel)
         backgroundView.addSubview(textFieldsStack)
         backgroundView.addSubview(buttonsStack)
     }
@@ -112,24 +111,25 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: - Activate return button on keyboard
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         mailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         return true
     }
     
-    //MARK: - Setup constaints
-    
 
-    @objc func logInButtonTapped() {
-        guard let albumsVC = UINavigationController(rootViewController: AlbumsViewController()) else { return }
-        albumsVC.modalPresentationStyle = .fullScreen
-        self.present(albumsVC, animated: true)
+    
+    //MARK: - logInButtonTapped Action
+    @objc private func logInButtonTapped() {
+        //let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
+        //albumsVC.modalPresentationStyle = .fullScreen
+        //self.present(albumsVC, animated: true)
         
     }
-    
-    @objc func regButtonTapped() {
-        guard let regVC = RegistrationViewController() else { return }
+
+    //MARK: - regButtonTapped Action
+    @objc private func regButtonTapped() {
+        let regVC = RegistrationViewController()
         self.present(regVC, animated: true)
         
     }
@@ -138,8 +138,46 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
 
 }
 
-
+//MARK: - Set constaints
 extension AuthorizationViewController {
-    
-    
+    private func setConstraints() {
+        
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        ])
+        
+        NSLayoutConstraint.activate([
+            backgroundView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            backgroundView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            backgroundView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            backgroundView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            authLabel.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        NSLayoutConstraint.activate([
+            textFieldsStack.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            textFieldsStack.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
+            textFieldsStack.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
+            textFieldsStack.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20)
+        ])
+        
+
+        
+        NSLayoutConstraint.activate([
+            regButton.heightAnchor.constraint(equalToConstant: 40),
+            logInButton.heightAnchor.constraint(equalToConstant: 40),
+        ])
+        
+        NSLayoutConstraint.activate([
+            buttonsStack.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
+            buttonsStack.topAnchor.constraint(equalTo: textFieldsStack.bottomAnchor, constant: 30),
+            buttonsStack.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
+        ])
+    }
 }
