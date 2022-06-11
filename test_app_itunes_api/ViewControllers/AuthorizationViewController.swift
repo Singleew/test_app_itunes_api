@@ -27,7 +27,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         let authLabel = UILabel()
         authLabel.text = "Authorization"
         authLabel.textAlignment = .center
-        authLabel.font = authLabel.font.withSize(30)
+        authLabel.font = UIFont.systemFont(ofSize: 30)
         authLabel.translatesAutoresizingMaskIntoConstraints = false
         return authLabel
     }()
@@ -99,7 +99,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
         view.addSubview(scrollView)
         scrollView.addSubview(backgroundView)
-       // backgroundView.addSubview(authLabel)
         backgroundView.addSubview(textFieldsStack)
         backgroundView.addSubview(buttonsStack)
     }
@@ -175,9 +174,9 @@ extension AuthorizationViewController {
         ])
         
         NSLayoutConstraint.activate([
-            buttonsStack.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
+            buttonsStack.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             buttonsStack.topAnchor.constraint(equalTo: textFieldsStack.bottomAnchor, constant: 30),
-            buttonsStack.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
+            buttonsStack.widthAnchor.constraint(equalToConstant: 300)
         ])
     }
 }

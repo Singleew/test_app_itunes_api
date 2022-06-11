@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RegistrationViewController: UIViewController {
+class RegistrationViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - Create UI Objects
     private let scrollView: UIScrollView = {
@@ -26,6 +26,7 @@ class RegistrationViewController: UIViewController {
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Registration"
+        titleLabel.font = UIFont.systemFont(ofSize: 30)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
     }()
@@ -48,6 +49,7 @@ class RegistrationViewController: UIViewController {
         let lastNameLabel = UILabel()
         lastNameLabel.text = "Last Name" + " *"
         lastNameLabel.font = UIFont.systemFont(ofSize: 14)
+        lastNameLabel.translatesAutoresizingMaskIntoConstraints = false
         return lastNameLabel
     }()
     
@@ -58,10 +60,26 @@ class RegistrationViewController: UIViewController {
         return lastNameTextField
     }()
     
+    private let dateOfBithLabel: UILabel = {
+        let mailLabel = UILabel()
+        mailLabel.text = "Date of birth" + " *"
+        mailLabel.font = UIFont.systemFont(ofSize: 14)
+        mailLabel.translatesAutoresizingMaskIntoConstraints = false
+        return mailLabel
+    }()
+    
+    private let dateOfBithTextField: UITextField = {
+        let dateOfBithTextField = UITextField()
+        dateOfBithTextField.borderStyle = .roundedRect
+        dateOfBithTextField.placeholder = "Tap to select the date of birth"
+        return dateOfBithTextField
+    }()
+    
     private let phoneLabel: UILabel = {
         let phoneLabel = UILabel()
         phoneLabel.text = "Phone number" + " *"
         phoneLabel.font = UIFont.systemFont(ofSize: 14)
+        phoneLabel.translatesAutoresizingMaskIntoConstraints = false
         return phoneLabel
     }()
     
@@ -76,6 +94,7 @@ class RegistrationViewController: UIViewController {
         let mailLabel = UILabel()
         mailLabel.text = "E-mail" + " *"
         mailLabel.font = UIFont.systemFont(ofSize: 14)
+        mailLabel.translatesAutoresizingMaskIntoConstraints = false
         return mailLabel
     }()
     
@@ -90,6 +109,7 @@ class RegistrationViewController: UIViewController {
         let passwordLabel = UILabel()
         passwordLabel.text = "Password" + " *"
         passwordLabel.font = UIFont.systemFont(ofSize: 14)
+        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
         return passwordLabel
     }()
     
@@ -104,6 +124,7 @@ class RegistrationViewController: UIViewController {
         let requiredFieldLabel = UILabel()
         requiredFieldLabel.text = "* - required fields"
         requiredFieldLabel.font = UIFont.systemFont(ofSize: 14)
+        requiredFieldLabel.translatesAutoresizingMaskIntoConstraints = false
         return requiredFieldLabel
     }()
     
@@ -122,13 +143,13 @@ class RegistrationViewController: UIViewController {
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .inline
         datePicker.backgroundColor = .white
-        datePicker.layer.borderWidth = 1
-        datePicker.clipsToBounds = true
-        datePicker.layer.cornerRadius = 6
         datePicker.tintColor = .black
+        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         return datePicker
     }()
+    
     
     //MARK: - Create StackView
     private var stackView = UIStackView()
@@ -138,23 +159,26 @@ class RegistrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setupDelegate()
+        //setupDelegate()
+        dateOfBithTextField.inputView = datePicker
         setConstraints()
+        
+        //MARK: - Create Hide DataPicker Action
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureDone))
+        self.view.addGestureRecognizer(tapGesture)
     }
 }
 
-
+//MARK: - Setup Views and StackView, Set Constraints
 extension RegistrationViewController {
     
-    //MARK: - Setup Views and StackView
     private func setupViews() {
         
-        title = "Registration" // naxya
-        
-        stackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField, lastNameLabel, lastNameTextField, datePicker, phoneLabel, phoneTextField, mailLabel, mailTextField, passwordLabel, passwordTextField, requiredFieldLabel])
+        stackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField, lastNameLabel, lastNameTextField, dateOfBithLabel, dateOfBithTextField, phoneLabel, phoneTextField, mailLabel, mailTextField, passwordLabel, passwordTextField, requiredFieldLabel])
         stackView.axis = .vertical
         stackView.spacing = 10
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(backgroundView)
@@ -164,7 +188,6 @@ extension RegistrationViewController {
         
     }
     
-    //MARK: - Set Constraints
     private func setConstraints() {
         NSLayoutConstraint.activate([
             
@@ -178,13 +201,13 @@ extension RegistrationViewController {
             backgroundView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             backgroundView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
+            titleLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -40),
+            
             stackView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             stackView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
-            
-            titleLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor, constant: -40),
             
             createAccountButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             createAccountButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 30),
@@ -192,8 +215,12 @@ extension RegistrationViewController {
             createAccountButton.widthAnchor.constraint(equalToConstant: 300)
         ])
     }
+}
+
+
+//MARK: - CreateAccountButtonTapped Action
+extension RegistrationViewController {
     
-    //MARK: - CreateAccountButtonTapped Action
     @objc func createAccountButtonTapped() {
         let alert = UIAlertController(title: "Warning!", message: "This feature is not active yet", preferredStyle: .alert)
         let action = UIAlertAction(title: "Skip", style: .cancel)
@@ -201,32 +228,40 @@ extension RegistrationViewController {
         self.present(alert, animated: true)
         
     }
-    
-    //MARK: - Setup delegate
-    private func setupDelegate() {
-        firstNameTextField.delegate = self
-        lastNameTextField.delegate = self
-        phoneTextField.delegate = self
-        mailTextField.delegate = self
-        passwordTextField.delegate = self
-    }
 }
 
+////MARK: - UITextFieldDelegate
+//extension RegistrationViewController: UITextFieldDelegate {
+
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        return false
+//    }
+//
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        firstNameTextField.resignFirstResponder()
+//        lastNameTextField.resignFirstResponder()
+//        mailTextField.resignFirstResponder()
+//        passwordTextField.resignFirstResponder()
+//        return true
+//    }
+//
+//}
 
 
-//MARK: - UITextFieldDelegate
-extension RegistrationViewController: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return false
+
+//MARK: - Select the date of birth
+extension RegistrationViewController {
+    private func getDateFromPicker() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        dateOfBithTextField.text = formatter.string(from: datePicker.date)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        firstNameTextField.resignFirstResponder()
-        lastNameTextField.resignFirstResponder()
-        mailTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
-        return true
+    @objc private func dateChanged() {
+        getDateFromPicker()
     }
     
+    @objc private func tapGestureDone() {
+        self.view.endEditing(true)
+    }
 }
