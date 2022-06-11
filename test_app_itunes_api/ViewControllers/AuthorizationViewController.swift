@@ -80,12 +80,17 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         setupView()
         setupTextFieldDelegate()
         setConstraints()
+        registerKeyboardShowNotification()
+    }
+    
+    deinit {
+        removeKeyBoardNotification()
     }
     
     //MARK: - Setup Views and StackView
     private func setupView() {
         view.backgroundColor = .white
-        textFieldsStack = UIStackView(arrangedSubviews: [authLabel, mailTextField, passwordTextField])
+        textFieldsStack = UIStackView(arrangedSubviews: [mailTextField, passwordTextField])
         textFieldsStack.axis = .vertical
         textFieldsStack.spacing = 10
         textFieldsStack.distribution = .fillProportionally
@@ -100,6 +105,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(scrollView)
         scrollView.addSubview(backgroundView)
         backgroundView.addSubview(textFieldsStack)
+        backgroundView.addSubview(authLabel)
         backgroundView.addSubview(buttonsStack)
     }
     
@@ -120,9 +126,9 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - logInButtonTapped Action
     @objc private func logInButtonTapped() {
-        //let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
-        //albumsVC.modalPresentationStyle = .fullScreen
-        //self.present(albumsVC, animated: true)
+        let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
+        albumsVC.modalPresentationStyle = .fullScreen
+        self.present(albumsVC, animated: true)
         
     }
 
@@ -156,21 +162,20 @@ extension AuthorizationViewController {
         ])
         
         NSLayoutConstraint.activate([
-            authLabel.heightAnchor.constraint(equalToConstant: 40)
-        ])
-        
-        NSLayoutConstraint.activate([
             textFieldsStack.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             textFieldsStack.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             textFieldsStack.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
             textFieldsStack.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20)
         ])
         
+        NSLayoutConstraint.activate([
+            authLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            authLabel.bottomAnchor.constraint(equalTo: textFieldsStack.topAnchor, constant: -40)
+        ])
 
-        
         NSLayoutConstraint.activate([
             regButton.heightAnchor.constraint(equalToConstant: 40),
-            logInButton.heightAnchor.constraint(equalToConstant: 40),
+            logInButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
@@ -179,4 +184,30 @@ extension AuthorizationViewController {
             buttonsStack.widthAnchor.constraint(equalToConstant: 300)
         ])
     }
+}
+
+//MARK: - Keyboard Notifications Show/Hide
+extension AuthorizationViewController {
+    
+    private func registerKeyboardShowNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        let userInfo = notification.userInfo
+        let keyboardSize = (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        scrollView.contentOffset = CGPoint(x: 0, y: keyboardSize.height / 2)
+        
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification){
+        scrollView.contentOffset = CGPoint.zero
+    }
+    
+    private func removeKeyBoardNotification() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
 }
