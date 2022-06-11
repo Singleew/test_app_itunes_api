@@ -16,11 +16,11 @@ class UserInfoViewController: UIViewController {
         return firstNameLabel
     }()
     
-    private let secondNameLabel: UILabel = {
-        let secondNameLabel = UILabel()
-        secondNameLabel.text = "Second Name"
-        secondNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        return secondNameLabel
+    private let lastNameLabel: UILabel = {
+        let lastNameLabel = UILabel()
+        lastNameLabel.text = "Second Name"
+        lastNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        return lastNameLabel
     }()
     
     private let ageLabel: UILabel = {
@@ -57,17 +57,35 @@ class UserInfoViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setConstraints()
+        setInfoModel()
     }
     
     private func setupViews() {
         title = "User Info"
         view.backgroundColor = .white
 
-        stackView = UIStackView(arrangedSubviews: [firstNameLabel, secondNameLabel, ageLabel, phoneLabel, emailLabel, passwordLabel])
+        stackView = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel, ageLabel, phoneLabel, emailLabel, passwordLabel])
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.distribution = .fillProportionally
         view.addSubview(stackView)
+    }
+    
+    private func setInfoModel() {
+        guard let activeUser = DataBase.shared.activeUser else { return }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let dateString = dateFormatter.string(from: activeUser.age)
+        
+        firstNameLabel.text = activeUser.firstName
+        lastNameLabel.text = activeUser.lastName
+        ageLabel.text = dateString
+        phoneLabel.text = activeUser.phoneNumber
+        emailLabel.text = activeUser.mail
+        passwordLabel.text = activeUser.password
+        
+        
     }
 }
 

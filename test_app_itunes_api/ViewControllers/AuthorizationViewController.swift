@@ -8,7 +8,7 @@
 import UIKit
 
 class AuthorizationViewController: UIViewController, UITextFieldDelegate {
-
+    
     //MARK: - Create UI Objects
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -122,16 +122,38 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-
+    
     
     //MARK: - logInButtonTapped Action
     @objc private func logInButtonTapped() {
-        let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
-        albumsVC.modalPresentationStyle = .fullScreen
-        self.present(albumsVC, animated: true)
+        let mail = mailTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        let user = findUser(mail: mail)
         
+        if user == nil {
+            alert(title: "Warning", message: "User not found")
+        } else if user?.password == password {
+            let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
+            albumsVC.modalPresentationStyle = .fullScreen
+            self.present(albumsVC, animated: true)
+            guard let activeUser = user else { return }
+            DataBase.shared.saveActiveUser(user: activeUser)
+        } else {
+            alert(title: "Failure", message: "Wrong password")
+        }
     }
-
+    
+    private func findUser(mail: String) -> User? {
+        let dataBase = DataBase.shared.users
+        for user in dataBase {
+            if user.mail == mail {
+                return user
+            }
+        }
+        return nil
+    }
+    
+    
     //MARK: - regButtonTapped Action
     @objc private func regButtonTapped() {
         let regVC = RegistrationViewController()
@@ -139,8 +161,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-
-
+    
+    
 }
 
 //MARK: - Set constaints
@@ -172,7 +194,7 @@ extension AuthorizationViewController {
             authLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             authLabel.bottomAnchor.constraint(equalTo: textFieldsStack.topAnchor, constant: -40)
         ])
-
+        
         NSLayoutConstraint.activate([
             regButton.heightAnchor.constraint(equalToConstant: 40),
             logInButton.heightAnchor.constraint(equalToConstant: 40)

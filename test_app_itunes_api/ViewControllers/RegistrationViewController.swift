@@ -86,7 +86,7 @@ class RegistrationViewController: UIViewController {
     private let phoneTextField: UITextField = {
         let phoneTextField = UITextField()
         phoneTextField.borderStyle = .roundedRect
-        phoneTextField.placeholder = "Enter phone number"
+        phoneTextField.text = "+ 7"
         phoneTextField.keyboardType = .numberPad
         return phoneTextField
     }()
@@ -248,10 +248,18 @@ extension RegistrationViewController {
 extension RegistrationViewController {
     
     @objc func createAccountButtonTapped() {
-        let alert = UIAlertController(title: "Warning!", message: "This feature is not active yet", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Skip", style: .cancel)
-        alert.addAction(action)
-        self.present(alert, animated: true)
+        let firstNameText = firstNameTextField.text ?? ""
+        let lastNameText = lastNameTextField.text ?? ""
+        let mailText = mailTextField.text ?? ""
+        let phoneNumberText = phoneTextField.text ?? ""
+        let passwordText = passwordTextField.text ?? ""
+        
+        if firstNameText.isValid(validType: firstAndLastNameValidType) && lastNameText.isValid(validType: firstAndLastNameValidType) && mailText.isValid(validType: emailValidType) && phoneNumberText.count == 19 && ageIsValid() == true && passwordText.isValid(validType: passwordValidType) {
+            DataBase.shared.saveUser(firstName: firstNameText, lastName: lastNameText, age: datePicker.date, phoneNumber: phoneNumberText, mail: mailText, password: passwordText)
+            alert(title: "Congratulate", message: "Registration complete")
+        } else {
+            alert(title: "Failure", message: "Check the required fields and your age")
+        }
         
     }
 }
@@ -356,7 +364,7 @@ extension RegistrationViewController: UITextFieldDelegate {
     //MARK: - Set Phone Mask
     
     private func format(phoneNumber: String, shouldRemoveLastDigit: Bool) -> String {
-        guard !(shouldRemoveLastDigit && phoneNumber.count <= 2) else { return "+7" }
+        guard !(shouldRemoveLastDigit && phoneNumber.count <= 3) else { return "+ 7" }
         
         let range = NSString(string: phoneNumber).range(of: phoneNumber)
         var number = regex.stringByReplacingMatches(in: phoneNumber, options: [], range: range, withTemplate: "")
@@ -374,11 +382,42 @@ extension RegistrationViewController: UITextFieldDelegate {
         let maxIndex = number.index(number.startIndex, offsetBy: number.count)
         let regRange = number.startIndex..<maxIndex
         
-
-            let pattern = "(\\d{3})(\\d{3})(\\d{2})(\\d{2})"
-            number = number.replacingOccurrences(of: pattern, with: "($1) $2-$3-$4", options: .regularExpression, range: regRange)
         
-        return "+7" + number
+        let pattern = "(\\d{3})(\\d{3})(\\d{2})(\\d{2})"
+        number = number.replacingOccurrences(of: pattern, with: " ($1) $2-$3-$4", options: .regularExpression, range: regRange)
+        
+        let result = "+ 7" + number
+        
+        if result.count == 19 {
+            phoneLabel.textColor = .green
+            phoneLabel.text = "Phone number" + " *"
+        } else {
+            phoneLabel.textColor = .red
+            phoneLabel.text = "Invalid Phone Number"
+        }
+        
+        return result
     }
-
+    
+    private func ageIsValid() -> Bool {
+        let calendar = NSCalendar.current
+        let currentDate = Date()
+        let birthDay = datePicker.date
+        var result: Bool
+        
+        let age = calendar.dateComponents([.year], from: birthDay, to: currentDate)
+        let ageCount = age.year
+        guard let ageCount = ageCount else {
+            return false
+        }
+        if ageCount < 18 {
+            result = false
+            dateOfBithLabel.textColor = .red
+        } else {
+            result = true
+            dateOfBithLabel.textColor = .green
+        }
+        
+        return result
+    }
 }

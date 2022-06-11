@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		495057D4284FA3CF0042C681 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495057D3284FA3CF0042C681 /* RegistrationViewController.swift */; };
+		496730E02855379600323C0E /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730DF2855379600323C0E /* UserDefaultsManager.swift */; };
+		496730E4285538D100323C0E /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730E3285538D100323C0E /* UserModel.swift */; };
+		496730E62855481800323C0E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730E52855481800323C0E /* Alert.swift */; };
 		49ADD85328549676009B7EB1 /* AlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADD85228549676009B7EB1 /* AlbumsViewController.swift */; };
 		49ADD85528549A50009B7EB1 /* AlbumsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADD85428549A50009B7EB1 /* AlbumsTableViewCell.swift */; };
 		49ADD8582854AA73009B7EB1 /* DetailAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ADD8572854AA73009B7EB1 /* DetailAlbumViewController.swift */; };
@@ -23,6 +26,9 @@
 
 /* Begin PBXFileReference section */
 		495057D3284FA3CF0042C681 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		496730DF2855379600323C0E /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		496730E3285538D100323C0E /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		496730E52855481800323C0E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		49ADD85228549676009B7EB1 /* AlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsViewController.swift; sourceTree = "<group>"; };
 		49ADD85428549A50009B7EB1 /* AlbumsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewCell.swift; sourceTree = "<group>"; };
 		49ADD8572854AA73009B7EB1 /* DetailAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +55,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		496730DE2855377900323C0E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				496730DF2855379600323C0E /* UserDefaultsManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		496730E1285537AB00323C0E /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				49D22E96284E8A9D009D91C7 /* AppDelegate.swift */,
+				49D22E98284E8A9D009D91C7 /* SceneDelegate.swift */,
+				49D22E9F284E8A9E009D91C7 /* Assets.xcassets */,
+				49D22EA1284E8A9E009D91C7 /* LaunchScreen.storyboard */,
+				49D22EA4284E8A9E009D91C7 /* Info.plist */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		496730E2285538A900323C0E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				496730E3285538D100323C0E /* UserModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		49ADD85628549A56009B7EB1 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -85,13 +119,11 @@
 		49D22E95284E8A9D009D91C7 /* test_app_itunes_api */ = {
 			isa = PBXGroup;
 			children = (
-				49D22E96284E8A9D009D91C7 /* AppDelegate.swift */,
-				49D22E98284E8A9D009D91C7 /* SceneDelegate.swift */,
+				496730E2285538A900323C0E /* Model */,
 				49D22EAA284E8B0C009D91C7 /* ViewControllers */,
+				496730DE2855377900323C0E /* Services */,
 				49ADD85D2854C3ED009B7EB1 /* Extensioins */,
-				49D22E9F284E8A9E009D91C7 /* Assets.xcassets */,
-				49D22EA1284E8A9E009D91C7 /* LaunchScreen.storyboard */,
-				49D22EA4284E8A9E009D91C7 /* Info.plist */,
+				496730E1285537AB00323C0E /* Support */,
 			);
 			path = test_app_itunes_api;
 			sourceTree = "<group>";
@@ -105,6 +137,7 @@
 				49ADD85228549676009B7EB1 /* AlbumsViewController.swift */,
 				49ADD8572854AA73009B7EB1 /* DetailAlbumViewController.swift */,
 				49ADD8592854AA8A009B7EB1 /* UserInfoViewController.swift */,
+				496730E52855481800323C0E /* Alert.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -183,11 +216,14 @@
 				49ADD85A2854AA8A009B7EB1 /* UserInfoViewController.swift in Sources */,
 				49ADD8582854AA73009B7EB1 /* DetailAlbumViewController.swift in Sources */,
 				49D22E97284E8A9D009D91C7 /* AppDelegate.swift in Sources */,
+				496730E02855379600323C0E /* UserDefaultsManager.swift in Sources */,
+				496730E62855481800323C0E /* Alert.swift in Sources */,
 				49D22E99284E8A9D009D91C7 /* SceneDelegate.swift in Sources */,
 				49ADD85C2854B3B5009B7EB1 /* SongsCollectionViewCell.swift in Sources */,
 				495057D4284FA3CF0042C681 /* RegistrationViewController.swift in Sources */,
 				49ADD85328549676009B7EB1 /* AlbumsViewController.swift in Sources */,
 				49ADD85528549A50009B7EB1 /* AlbumsTableViewCell.swift in Sources */,
+				496730E4285538D100323C0E /* UserModel.swift in Sources */,
 				49ADD85F2854C411009B7EB1 /* Extansions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,7 +367,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7L868WZ32W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = test_app_itunes_api/Info.plist;
+				INFOPLIST_FILE = /Users/ilia/Developers/test_app_itunes_api/test_app_itunes_api/Support/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -360,7 +396,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7L868WZ32W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = test_app_itunes_api/Info.plist;
+				INFOPLIST_FILE = /Users/ilia/Developers/test_app_itunes_api/test_app_itunes_api/Support/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
