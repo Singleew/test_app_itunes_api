@@ -11,7 +11,6 @@ struct AlbumModel: Codable, Equatable {
     let results: [Album]
 }
 
-
 struct Album: Codable, Equatable {
     let artistName: String
     let collectionName: String
@@ -20,4 +19,3 @@ struct Album: Codable, Equatable {
     let releaseDate: String
     let collectionId: Int
 }
-

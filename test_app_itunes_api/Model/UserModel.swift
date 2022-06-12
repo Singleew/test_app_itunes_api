@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct User: Codable {
-    
-    let firstName: String
-    let lastName: String
+struct User: Decodable, Encodable {
+
+    let firstName: String?
+    let lastName: String?
     let age: Date
-    let phoneNumber: String
-    let mail: String
-    let password: String
+    let phoneNumber: String?
+    let mail: String?
+    let password: String?
 }

@@ -16,7 +16,7 @@ class AlbumsTableViewCell: UITableViewCell {
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         return logoImageView
     }()
-    
+
     private let albumNameLabel: UILabel = {
        let albumNameLabel = UILabel()
         albumNameLabel.text = "Name album name"
@@ -24,7 +24,7 @@ class AlbumsTableViewCell: UITableViewCell {
         albumNameLabel.translatesAutoresizingMaskIntoConstraints = false
         return albumNameLabel
     }()
-    
+
     private let artistNameLabel: UILabel = {
         let artistNameLabel = UILabel()
         artistNameLabel.text = "Name artist name"
@@ -32,7 +32,7 @@ class AlbumsTableViewCell: UITableViewCell {
         artistNameLabel.translatesAutoresizingMaskIntoConstraints = false
          return artistNameLabel
     }()
-    
+
     private let trackCountLabel: UILabel = {
         let trackCountLabel = UILabel()
         trackCountLabel.text = "16 tracks"
@@ -40,7 +40,7 @@ class AlbumsTableViewCell: UITableViewCell {
         trackCountLabel.translatesAutoresizingMaskIntoConstraints = false
          return trackCountLabel
     }()
-    
+
     var stackView = UIStackView()
 
     override func layoutSubviews() {
@@ -54,25 +54,24 @@ class AlbumsTableViewCell: UITableViewCell {
         setViews()
         setConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    //MARK: - Configure Cell with fetch
-    
+
+    // MARK: - Configure Cell with fetch
+
     func configureCell(album: Album) {
         if let urlString = album.artworkUrl100 {
             NetworkManager.shared.request(urlString: urlString) { [weak self] result in
                 switch result {
-                    case .success(let data):
+                case .success(let data):
                         let image = UIImage(data: data)
                         self?.logoImageView.image = image
-                    case .failure(let error):
+                case .failure(let error):
                         self?.logoImageView.image = nil
                         print("No album logo" + error.localizedDescription)
-                        
+
                 }
             }
         } else {
@@ -82,15 +81,15 @@ class AlbumsTableViewCell: UITableViewCell {
         artistNameLabel.text = album.artistName
         trackCountLabel.text = "\(album.trackCount) tracks"
     }
-    
-    //MARK: - Set Views
+
+    // MARK: - Set Views
     private func setViews() {
         self.backgroundColor = .white
         self.selectionStyle = .none
-        
+
         self.addSubview(logoImageView)
         self.addSubview(albumNameLabel)
-        
+
         stackView = UIStackView(arrangedSubviews: [artistNameLabel, trackCountLabel])
         stackView.axis = .horizontal
         stackView.spacing = 10
@@ -107,13 +106,13 @@ class AlbumsTableViewCell: UITableViewCell {
             logoImageView.heightAnchor.constraint(equalToConstant: 60),
             logoImageView.widthAnchor.constraint(equalToConstant: 60)
         ])
-        
+
         NSLayoutConstraint.activate([
             albumNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
             albumNameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 10),
             albumNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
-        
+
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: albumNameLabel.bottomAnchor, constant: 10),
             stackView.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 10),
