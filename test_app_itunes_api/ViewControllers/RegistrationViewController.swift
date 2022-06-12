@@ -256,6 +256,8 @@ extension RegistrationViewController {
         
         if firstNameText.isValid(validType: firstAndLastNameValidType) && lastNameText.isValid(validType: firstAndLastNameValidType) && mailText.isValid(validType: emailValidType) && phoneNumberText.count == 19 && ageIsValid() == true && passwordText.isValid(validType: passwordValidType) {
             DataBase.shared.saveUser(firstName: firstNameText, lastName: lastNameText, age: datePicker.date, phoneNumber: phoneNumberText, mail: mailText, password: passwordText)
+            
+            
             alert(title: "Congratulate", message: "Registration complete")
         } else {
             alert(title: "Failure", message: "Check the required fields and your age")

@@ -22,24 +22,22 @@ class DataBase {
     
     var users: [User] {
         get {
-            if let data = defaults.value(forKey: userKey) as? Data {
+            if let data = defaults.value(forKey: SettingKeys.users.rawValue) as? Data {
                 return try! PropertyListDecoder().decode([User].self, from: data)
             } else {
                 return [User]()
-                
             }
-            
         }
         set {
             if let data = try? PropertyListEncoder().encode(newValue) {
-                defaults.set(data, forKey: userKey)
+                defaults.set(data, forKey: SettingKeys.users.rawValue)
             }
         }
     }
     
     func saveUser(firstName: String, lastName: String, age: Date, phoneNumber: String, mail: String, password: String) {
         let user = User(firstName: firstName, lastName: lastName, age: age, phoneNumber: phoneNumber, mail: mail, password: password)
-        users.insert(user, at: 0)
+        users.append(user)
     }
     
     

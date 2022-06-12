@@ -11,7 +11,7 @@ class AlbumsTableViewCell: UITableViewCell {
 
     private let logoImageView: UIImageView = {
        let logoImageView = UIImageView()
-        logoImageView.backgroundColor = .red
+        logoImageView.backgroundColor = .black
         logoImageView.clipsToBounds = true
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         return logoImageView
@@ -45,7 +45,7 @@ class AlbumsTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        logoImageView.layer.cornerRadius = logoImageView.frame.width / 2
+        logoImageView.layer.cornerRadius = 20
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -59,6 +59,31 @@ class AlbumsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    //MARK: - Configure Cell with fetch
+    
+    func configureCell(album: Album) {
+        if let urlString = album.artworkUrl100 {
+            NetworkManager.shared.request(urlString: urlString) { [weak self] result in
+                switch result {
+                    case .success(let data):
+                        let image = UIImage(data: data)
+                        self?.logoImageView.image = image
+                    case .failure(let error):
+                        self?.logoImageView.image = nil
+                        print("No album logo" + error.localizedDescription)
+                        
+                }
+            }
+        } else {
+            logoImageView.image = nil
+        }
+        albumNameLabel.text = album.collectionName
+        artistNameLabel.text = album.artistName
+        trackCountLabel.text = "\(album.trackCount) tracks"
+    }
+    
+    //MARK: - Set Views
     private func setViews() {
         self.backgroundColor = .white
         self.selectionStyle = .none
@@ -70,6 +95,7 @@ class AlbumsTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.spacing = 10
         stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(stackView)
     }
 

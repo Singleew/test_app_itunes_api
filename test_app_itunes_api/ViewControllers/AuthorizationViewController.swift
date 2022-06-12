@@ -126,21 +126,25 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - logInButtonTapped Action
     @objc private func logInButtonTapped() {
-        let mail = mailTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        let user = findUser(mail: mail)
+//        let mail = mailTextField.text ?? ""
+//        let password = passwordTextField.text ?? ""
+//        let user = findUser(mail: mail)
+//
+//        if user == nil {
+//            alert(title: "Warning", message: "User not found")
+//        } else if user?.password == password {
+//            let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
+//            albumsVC.modalPresentationStyle = .fullScreen
+//            self.present(albumsVC, animated: true)
+//            guard let activeUser = user else { return }
+//            DataBase.shared.saveActiveUser(user: activeUser)
+//        } else {
+//            alert(title: "Failure", message: "Wrong password")
+//        }
         
-        if user == nil {
-            alert(title: "Warning", message: "User not found")
-        } else if user?.password == password {
-            let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
-            albumsVC.modalPresentationStyle = .fullScreen
-            self.present(albumsVC, animated: true)
-            guard let activeUser = user else { return }
-            DataBase.shared.saveActiveUser(user: activeUser)
-        } else {
-            alert(title: "Failure", message: "Wrong password")
-        }
+        let albumsVC = UINavigationController(rootViewController: AlbumsViewController())
+        albumsVC.modalPresentationStyle = .fullScreen
+        self.present(albumsVC, animated: true)
     }
     
     private func findUser(mail: String) -> User? {

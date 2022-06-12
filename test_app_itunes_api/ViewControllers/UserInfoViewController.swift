@@ -68,6 +68,7 @@ class UserInfoViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.distribution = .fillProportionally
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
     }
     

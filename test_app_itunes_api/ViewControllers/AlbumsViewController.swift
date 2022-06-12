@@ -7,8 +7,13 @@
 
 import UIKit
 
-class AlbumsViewController: UIViewController, UISearchControllerDelegate {
+class AlbumsViewController: UIViewController, UISearchBarDelegate, UISearchControllerDelegate {
     
+    var albums = [Album]()
+    var timer: Timer?
+    
+    
+    private let searchController = UISearchController(searchResultsController: nil)
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -22,30 +27,44 @@ class AlbumsViewController: UIViewController, UISearchControllerDelegate {
         super.viewDidLoad()
         setNavigationBar()
         setViews()
-        setDelegate()
+        setTableViewConstraints()
+        setSearchController()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        searchController.searchBar.delegate = self
     }
     
 }
 
 //MARK: Set Navigation Bar (userInfoButton and SearchBar)
-extension AlbumsViewController: UISearchBarDelegate {
+extension AlbumsViewController {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let text = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        
+        if text != "" {
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
+                self?.fetchAlbums(albumName: text!)
+                self?.fetchAlbums(albumName: searchText)
+            })
+        } else {
+            albums = []
+            self.tableView.reloadData()
+        }
+    }
+}
+
+extension AlbumsViewController {
     
     private func setNavigationBar() {
         navigationItem.title = "Albums"
-        navigationItem.searchController = createSearchController()
+        navigationItem.searchController = searchController
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: createUserInfoButton())
-        
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
-    }
-    
-    private func createSearchController() -> UISearchController {
-        let searchController = UISearchController(searchResultsController: nil)
+    private func setSearchController() {
         searchController.searchBar.placeholder = "Search"
         searchController.obscuresBackgroundDuringPresentation = false
-        return searchController
     }
     
     private func createUserInfoButton() -> UIButton {
@@ -55,18 +74,40 @@ extension AlbumsViewController: UISearchBarDelegate {
         userInfoButton.addTarget(self, action: #selector(userInfoButtonTapped), for: .touchUpInside)
         return userInfoButton
     }
+    
+    //MARK: - Search Albums
+    private func fetchAlbums(albumName: String) {
+        let urlString = "https://itunes.apple.com/search?term=\(albumName)&entity=album&attribute=albumTerm"
+        NetworkManager.shared.fetchAlbums(urlString: urlString) { [weak self] albumModel, error in
+            if error == nil {
+                guard let albumModel = albumModel else { return }
+                if albumModel.results != [] {
+                    let sortedAlbums = albumModel.results.sorted { firstItem, secondItem in
+                        return firstItem.collectionName.compare(secondItem.collectionName) == ComparisonResult.orderedAscending
+                    }
+                    self?.albums = sortedAlbums
+                    self?.tableView.reloadData()
+                } else {
+                    self?.alert(title: "Error", message: "Albums not founded")
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        }
+    }
 }
 
 //MARK: - Set TableViewDelegate and TableViewDataSourse
 extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        albums.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! AlbumsTableViewCell
-        
+        let album = albums[indexPath.row]
+        cell.configureCell(album: album)
         return cell
     }
     
@@ -76,6 +117,9 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailAlbumViewController = DetailAlbumViewController()
+        let album = albums[indexPath.row]
+        detailAlbumViewController.album = album
+        detailAlbumViewController.title = album.artistName
         navigationController?.pushViewController(detailAlbumViewController, animated: true)
     }
     
@@ -98,16 +142,6 @@ extension AlbumsViewController {
     private func setViews() {
         self.view.backgroundColor = .white
         self.view.addSubview(tableView)
-        setTableViewConstraints()
-    }
-}
-
-//MARK: - Set Delegate
-extension AlbumsViewController {
-    private func setDelegate() {
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.navigationItem.searchController?.delegate = self
     }
 }
 

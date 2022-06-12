@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		495057D4284FA3CF0042C681 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495057D3284FA3CF0042C681 /* RegistrationViewController.swift */; };
+		4963E6182855CF0D00B19FCC /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4963E6172855CF0D00B19FCC /* AlbumModel.swift */; };
+		4963E61A2855D23A00B19FCC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4963E6192855D23A00B19FCC /* NetworkManager.swift */; };
+		4963E61C285612EC00B19FCC /* SongsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4963E61B285612EC00B19FCC /* SongsModel.swift */; };
 		496730E02855379600323C0E /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730DF2855379600323C0E /* UserDefaultsManager.swift */; };
 		496730E4285538D100323C0E /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730E3285538D100323C0E /* UserModel.swift */; };
 		496730E62855481800323C0E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496730E52855481800323C0E /* Alert.swift */; };
@@ -26,6 +29,9 @@
 
 /* Begin PBXFileReference section */
 		495057D3284FA3CF0042C681 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		4963E6172855CF0D00B19FCC /* AlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
+		4963E6192855D23A00B19FCC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		4963E61B285612EC00B19FCC /* SongsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongsModel.swift; sourceTree = "<group>"; };
 		496730DF2855379600323C0E /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		496730E3285538D100323C0E /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		496730E52855481800323C0E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
@@ -59,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				496730DF2855379600323C0E /* UserDefaultsManager.swift */,
+				4963E6192855D23A00B19FCC /* NetworkManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -79,6 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				496730E3285538D100323C0E /* UserModel.swift */,
+				4963E6172855CF0D00B19FCC /* AlbumModel.swift */,
+				4963E61B285612EC00B19FCC /* SongsModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -218,11 +227,14 @@
 				49D22E97284E8A9D009D91C7 /* AppDelegate.swift in Sources */,
 				496730E02855379600323C0E /* UserDefaultsManager.swift in Sources */,
 				496730E62855481800323C0E /* Alert.swift in Sources */,
+				4963E61C285612EC00B19FCC /* SongsModel.swift in Sources */,
 				49D22E99284E8A9D009D91C7 /* SceneDelegate.swift in Sources */,
+				4963E6182855CF0D00B19FCC /* AlbumModel.swift in Sources */,
 				49ADD85C2854B3B5009B7EB1 /* SongsCollectionViewCell.swift in Sources */,
 				495057D4284FA3CF0042C681 /* RegistrationViewController.swift in Sources */,
 				49ADD85328549676009B7EB1 /* AlbumsViewController.swift in Sources */,
 				49ADD85528549A50009B7EB1 /* AlbumsTableViewCell.swift in Sources */,
+				4963E61A2855D23A00B19FCC /* NetworkManager.swift in Sources */,
 				496730E4285538D100323C0E /* UserModel.swift in Sources */,
 				49ADD85F2854C411009B7EB1 /* Extansions.swift in Sources */,
 			);
