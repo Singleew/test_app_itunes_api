@@ -29,7 +29,6 @@ extension String {
         case .email: regex = Regex.email.rawValue
         case .password: regex = Regex.password.rawValue
         }
-
         return NSPredicate(format: format, regex).evaluate(with: self)
     }
 }

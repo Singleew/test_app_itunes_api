@@ -8,12 +8,13 @@
 import UIKit
 
 class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
-                                    UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+                                 UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     var album: Album?
     var songs = [Song]()
     private var stackView = UIStackView()
-
+    
+    // MARK: - Create UI Objects
     private let albumLogoView: UIImageView = {
         let albumLogoView = UIImageView()
         albumLogoView.backgroundColor = .red
@@ -22,7 +23,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         albumLogoView.translatesAutoresizingMaskIntoConstraints = false
         return albumLogoView
     }()
-
+    
     private let albumNameLabel: UILabel = {
         let albumNameLabel = UILabel()
         albumNameLabel.numberOfLines = 0
@@ -31,7 +32,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         albumNameLabel.translatesAutoresizingMaskIntoConstraints = false
         return albumNameLabel
     }()
-
+    
     private let trackListLabel: UILabel = {
         let trackListLabel = UILabel()
         trackListLabel.numberOfLines = 0
@@ -40,7 +41,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         trackListLabel.translatesAutoresizingMaskIntoConstraints = false
         return trackListLabel
     }()
-
+    
     private let artistNameLabel: UILabel = {
         let artistNameLabel = UILabel()
         artistNameLabel.text = "Artist Name"
@@ -48,7 +49,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         artistNameLabel.translatesAutoresizingMaskIntoConstraints = false
         return artistNameLabel
     }()
-
+    
     private let releaseDateLabel: UILabel = {
         let releaseDateLabel = UILabel()
         releaseDateLabel.text = "Release date"
@@ -56,7 +57,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         releaseDateLabel.translatesAutoresizingMaskIntoConstraints = false
         return releaseDateLabel
     }()
-
+    
     private let trackCountLabel: UILabel = {
         let trackCountLabel = UILabel()
         trackCountLabel.text = "10 tracks"
@@ -64,7 +65,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         trackCountLabel.translatesAutoresizingMaskIntoConstraints = false
         return trackCountLabel
     }()
-
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 13
@@ -75,7 +76,8 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-
+    
+    // MARK: - View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         setViews()
@@ -86,6 +88,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         collectionView.delegate = self
         collectionView.dataSource = self
     }
+    
     private func setViews() {
         view.backgroundColor = .white
         view.addSubview(albumLogoView)
@@ -98,11 +101,12 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         view.addSubview(collectionView)
         view.addSubview(trackListLabel)
     }
-
+    
+    // MARK: - Set CollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         songs.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -111,7 +115,7 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
         cell.songNameLabel.text = songName
         return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -120,7 +124,6 @@ class DetailAlbumViewController: UIViewController, UICollectionViewDelegate,
 }
 
 // MARK: - SetConstraints
-
 extension DetailAlbumViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([
@@ -158,7 +161,7 @@ extension DetailAlbumViewController {
         self.artistNameLabel.text = "Artist Name: \(album.artistName)"
         self.releaseDateLabel.text = "Release Date: \(setDateFormat(dateP: album.releaseDate))"
     }
-
+    
     private func setDateFormat(dateP: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"
@@ -168,15 +171,15 @@ extension DetailAlbumViewController {
         let date = formatDate.string(from: backEndDate)
         return date
     }
-
+    
     private func setImage(url: String?, imageView: UIImageView) {
         if let urlString = url {
             NetworkManager.shared.request(urlString: urlString) { result in
                 switch result {
-                case .success(let data):
+                    case .success(let data):
                         let image = UIImage(data: data)
                         imageView.image = image
-                case .failure(let error):
+                    case .failure(let error):
                         imageView.image = nil
                         print("No album logo" + error.localizedDescription)
                 }
@@ -185,7 +188,7 @@ extension DetailAlbumViewController {
             imageView.image = nil
         }
     }
-
+    
     private func fetchSongs() {
         guard let album = album else { return }
         let collectionIDAlbum = album.collectionId
@@ -196,7 +199,7 @@ extension DetailAlbumViewController {
                 guard let songModel = songModel else { return }
                 self.songs = songModel.results
                 self.collectionView.reloadData()
-
+                
             } else {
                 self.alert(title: "Eror", message: error!.localizedDescription)
             }

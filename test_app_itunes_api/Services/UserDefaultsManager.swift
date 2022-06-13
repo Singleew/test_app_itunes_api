@@ -8,18 +8,18 @@
 import Foundation
 
 class DataBase {
-
+    
     static let shared = DataBase()
-
+    
     enum SettingKeys: String {
         case users
         case activeUser
     }
-
+    
     let defaults = UserDefaults.standard
     let userKey: String = SettingKeys.users.rawValue
     let activeUserKey = SettingKeys.activeUser.rawValue
-
+    
     var users: [User] {
         get {
             if let data = defaults.value(forKey: userKey) as? Data {
@@ -34,7 +34,7 @@ class DataBase {
             }
         }
     }
-
+    
     var activeUser: User? {
         get {
             if let data = defaults.value(forKey: activeUserKey) as? Data {
@@ -49,7 +49,7 @@ class DataBase {
             }
         }
     }
-
+    
     
     func saveUser(firstName: String, lastName: String, age: Date, phoneNumber: String, mail: String, password: String) {
         
@@ -61,7 +61,6 @@ class DataBase {
         activeUser = user
     }
     
-    
     func fetchUser(mail: String) -> User? {
         let userData = self.users
         for user in userData {
@@ -71,5 +70,4 @@ class DataBase {
         }
         return nil
     }
-
 }
